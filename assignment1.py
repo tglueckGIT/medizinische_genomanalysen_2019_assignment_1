@@ -16,7 +16,7 @@ class Assignment1:
         self.bamfile = os.path.join(os.getcwd(), "chr21.bam")
         self.baifile = os.path.join(os.getcwd(), "chr21.bam.bai")
         self.samfile = pysam.AlignmentFile(self.bamfile, "rb")
-        self.reads = list(self.samfile.fetch("chr21", 1, 100))#self.genedict["txStart"], self.genedict["txEnd"]))
+        self.reads = list(self.samfile.fetch(int(self.genedict["txStart"]), int(self.genedict["txEnd"])))
 
     def download_gene_coordinates(self, genome_reference, file_name):
         ## TODO concept
@@ -49,8 +49,6 @@ class Assignment1:
         
         ## Write to file
         ## TODO this may need some work
-        #geneList = []
-        #lineList = []
         line = 0
         with open("output.txt", "w") as fh:
             for row in cursor:
@@ -59,10 +57,6 @@ class Assignment1:
                 if (row[0] == self.gene):
                 	self.lineList.append(line)
                 	self.geneList.append(row) ## all lines relevant to the gene are in this list now
-        ## Close cursor & connection
-        # QNAME    FLAG   RNAME        POS     MAPQ CIGAR  
-        #CLDN14 NM_012130 chr21 36460620,36466441 - 2 36460620,36466366 36461776,36466441
-        #print(self.geneList)
         cursor.close()
         cnx.close()
         
