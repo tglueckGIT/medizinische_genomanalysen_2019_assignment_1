@@ -12,11 +12,11 @@ class Assignment1:
         self.gene = "CLDN14"
         self.geneList = []
         self.lineList = []
-        self.genedict = self.download_gene_coordinates("hg38", "fetched_genes")
+        #self.genedict = self.download_gene_coordinates("hg38", "fetched_genes")
         self.bamfile = os.path.join(os.getcwd(), "chr21.bam")
         self.baifile = os.path.join(os.getcwd(), "chr21.bam.bai")
         self.samfile = pysam.AlignmentFile(self.bamfile, "rb")
-        self.reads = list(self.samfile.fetch(int(self.genedict["txStart"]), int(self.genedict["txEnd"])))
+        
 
     def download_gene_coordinates(self, genome_reference, file_name):
         ## TODO concept
@@ -59,7 +59,7 @@ class Assignment1:
                 	self.geneList.append(row) ## all lines relevant to the gene are in this list now
         cursor.close()
         cnx.close()
-        
+        self.reads = list(self.samfile.fetch("chr21", self.geneList[0][3], self.geneList[0][4]))
         print("Done fetching data")
         
     def get_coordinates_of_gene(self):
@@ -129,8 +129,8 @@ class Assignment1:
         for line in b:
             number = float(line[3])
             beg = int(line[1])
-            if beg > self.genedict["tx:Start"]:
-                if int(line[2]) <= self.genedict["txEnd"]:
+            if beg > self.geneList[0][3]:
+                if int(line[2]) <= self.geneList[0][4]:
                     sum += number
                     i+=1
         return(sum/i)
