@@ -12,7 +12,6 @@ class Assignment1:
         self.gene = "CLDN14"
         self.geneList = []
         self.lineList = []
-        #self.genedict = self.download_gene_coordinates("hg38", "fetched_genes")
         self.bamfile = os.path.join(os.getcwd(), "chr21.bam")
         self.baifile = os.path.join(os.getcwd(), "chr21.bam.bai")
         self.samfile = pysam.AlignmentFile(self.bamfile, "rb")
@@ -128,12 +127,15 @@ class Assignment1:
 
         for line in b:
             number = float(line[3])
-            beg = int(line[1])
-            if beg > self.geneList[0][3]:
-                if int(line[2]) <= self.geneList[0][4]:
+            beg = int(line[2])
+            if beg >= self.geneList[0][3] and len(line)>=3:
+                if int(line[1]) <= self.geneList[0][4]:
                     sum += number
                     i+=1
-        return(sum/i)
+        if i==0:
+            return ("No genes found.")
+        else:
+            return(sum/i)
         
     def get_number_mapped_reads(self):
         i=0
@@ -156,7 +158,7 @@ class Assignment1:
         print("Properly paired reads: " + str(self.get_properly_paired_reads_of_gene()))
         print("Reads with indels: " + str(self.get_gene_reads_with_indels()))
         print("Total average coverage: " + str(self.calculate_total_average_coverage()))
-        print("Gene average coverage: " + str(self.calculate_gene_average_coverage()))
+        #print("Gene average coverage: " + str(self.calculate_gene_average_coverage()))
         print("Number of mapped reads: " + str(self.get_number_mapped_reads()))
         print("Region of gene: " + str(self.get_region_of_gene()))
         print("Number of exons: " + str(self.get_number_of_exons()))
