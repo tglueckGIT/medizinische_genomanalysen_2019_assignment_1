@@ -120,20 +120,17 @@ class Assignment1:
         return(sum/i)
         
     def calculate_gene_average_coverage(self):
-        a = pybedtools.BedTool(self.bamfile)
-        b = a.genome_coverage(bg=True)
+        bam = pybedtools.BedTool(self.bamfile)
+        cov = bam.genome_coverage(bg=True, genome="hg38")
+        i = 0
         sum = 0
-        i=0
-
-        for line in b:
-            number = float(line[3])
-            beg = int(line[2])
-            if beg >= self.geneList[0][3] and len(line)>=3:
-                if int(line[1]) <= self.geneList[0][4]:
-                    sum += number
-                    i+=1
-        if i==0:
-            return ("No genes found.")
+        for line in cov:
+            if int(line[1]) >= self.geneList[0][3] and int(line[2] <= geneList[0][4]) and len(line) >= 3:
+                number = float(line[3])
+                sum += number
+                i+=1
+        if i == 0:
+            return("no coverage")
         else:
             return(sum/i)
         
